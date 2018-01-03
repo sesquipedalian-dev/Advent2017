@@ -9,3 +9,27 @@ export const anInt = createReducer(0, {
         return state + action.amount;
     }
 });
+
+export const day1Part1Input = createReducer('', { 
+    [types.DAY1_INPUT1](state, action) { 
+        return action.input;
+    }
+});
+
+export const day1Output1 = createReducer(undefined, { 
+    [types.DAY1_OUTPUT1](state, action) { 
+        return action.output;
+    }
+});
+
+export const day1Input2 = createReducer('', { 
+    [types.DAY1_INPUT2](state, action) { 
+        return action.input;
+    }
+});
+
+export const day1Output2 = createReducer(undefined, { 
+    [types.DAY1_OUTPUT2](state, action) { 
+        return action.output;
+    }
+});

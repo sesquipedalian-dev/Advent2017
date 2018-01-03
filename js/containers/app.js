@@ -12,22 +12,11 @@ class App extends Component {
     render() { 
         return (
             <View>
-                <Text>Hello, World!</Text>
-                <Text>Number: {this.props.anInt}</Text>
-                <Text>Number2: {this.props.aSecondInt}</Text>
+                <Text>Welcome to the Advent of Code!</Text>
+                <Text>Go to a day!</Text>
                 <Button
-                    onPress={this.changeInt.bind(this)}
-                    title='change the int!'
-                />
-                <Button
-                    onPress={
-                        /* Use the router's Actions to go to another scene - 
-                           the one with key = 'other' in the router definition
-                           in index.js
-                        */
-                        Actions.other
-                    }
-                    title='go to second scene!'
+                    onPress={Actions.day1}
+                    title='Day 1'
                 />
             </View>
         );

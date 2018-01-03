@@ -48,7 +48,7 @@ const RouterWithRedux = connect()(Router);
 import { connect } from 'react-redux';
 import { Component } from 'react';
 import AppContainer from './js/containers/app';
-import SecondScene  from './js/containers/secondScene';
+import Day1  from './js/containers/day1';
 
 class App extends Component { 
     render() { 
@@ -59,7 +59,7 @@ class App extends Component {
                     few forms though (e.g. tabs, stacks, etc) */}
                     <Scene key="root">
                         <Scene key="landing" component={AppContainer} title="Landing"/>
-                        <Scene key="other" component={SecondScene} title="Other"/>
+                        <Scene key="day1" component={Day1} title="Day 1"/>
                     </Scene>
                 </RouterWithRedux>
             </Provider>

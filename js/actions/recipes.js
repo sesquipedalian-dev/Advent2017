@@ -24,3 +24,31 @@ export function delayed(amount) {
         }, 5000);
     }
 }
+
+export function setDay1Input1(input) { 
+    return { 
+        type: types.DAY1_INPUT1,
+        input
+    };
+}
+
+export function setDay1Output1(output) { 
+    return { 
+        type: types.DAY1_OUTPUT1,
+        output
+    };
+}
+
+export function setDay1Input2(input) { 
+    return { 
+        type: types.DAY1_INPUT2,
+        input
+    };
+}
+
+export function setDay1Output2(output) { 
+    return { 
+        type: types.DAY1_OUTPUT2, 
+        output
+    };
+}
