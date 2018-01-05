@@ -18,6 +18,7 @@ class App extends Component {
                     onPress={Actions.day1}
                     title='Day 1'
                 />
+                <Button onPress={Actions.day2} title='Day 2'/>
             </View>
         );
     }

@@ -52,3 +52,17 @@ export function setDay1Output2(output) {
         output
     };
 }
+
+export function setDay2Input1(input) { 
+    return { 
+        type: types.DAY2_INPUT1, 
+        input
+    };
+}
+
+export function setDay2Output1(output) { 
+    return { 
+        type: types.DAY2_OUTPUT1, 
+        output
+    };
+}

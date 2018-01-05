@@ -48,7 +48,8 @@ const RouterWithRedux = connect()(Router);
 import { connect } from 'react-redux';
 import { Component } from 'react';
 import AppContainer from './js/containers/app';
-import Day1  from './js/containers/day1';
+import Day1 from './js/containers/day1';
+import Day2 from './js/containers/day2';
 
 class App extends Component { 
     render() { 
@@ -60,6 +61,7 @@ class App extends Component {
                     <Scene key="root">
                         <Scene key="landing" component={AppContainer} title="Landing"/>
                         <Scene key="day1" component={Day1} title="Day 1"/>
+                        <Scene key="day2" component={Day2} title="Day 2"/>
                     </Scene>
                 </RouterWithRedux>
             </Provider>
