@@ -66,3 +66,17 @@ export function setDay2Output1(output) {
         output
     };
 }
+
+export function setDay2Input2(input) { 
+    return { 
+        type: types.DAY2_INPUT2,
+        input
+    };
+}
+
+export function setDay2Output2(output) { 
+    return {
+        type: types.DAY2_OUTPUT2, 
+        output
+    };
+}

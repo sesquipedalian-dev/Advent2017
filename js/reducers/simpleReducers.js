@@ -45,3 +45,9 @@ export const day2Output1 = createReducer(undefined, {
         return action.output;
     }
 });
+
+export const day2Output2 = createReducer(undefined, { 
+    [types.DAY2_OUTPUT2](state, action) { 
+        return action.output;
+    }
+});
