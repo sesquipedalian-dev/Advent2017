@@ -3,7 +3,7 @@ import { View, Text, Button, TextInput } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import defineView from '../lib/defineView';
 
-class Day1 extends Component {
+class Day2 extends Component {
     back() { 
         Actions.pop();
     } 
@@ -170,7 +170,7 @@ class Day1 extends Component {
     }
 }
 
-export default comp = defineView(Day1, (state) => {
+export default comp = defineView(Day2, (state) => {
     return { 
         input1: state.day2Input1, 
         output1: state.day2Output1,
