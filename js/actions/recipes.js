@@ -74,7 +74,6 @@ export function setDay2Output2(output) {
     };
 }
 
-
 export function setDay3Input1(input) { 
     return { 
         type: types.DAY3_INPUT1, 
@@ -92,6 +91,27 @@ export function setDay3Output1(output) {
 export function setDay3Output2(output) { 
     return { 
         type: types.DAY3_OUTPUT2, 
+        output
+    };
+}
+
+export function setDay4Input1(input) { 
+    return { 
+        type: types.DAY4_INPUT1,
+        input
+    };
+}
+
+export function setDay4Output1(output) { 
+    return { 
+        type: types.DAY4_OUTPUT1, 
+        output
+    };
+}
+
+export function setDay4Output2(output) { 
+    return { 
+        type: types.DAY4_OUTPUT2,
         output
     };
 }
