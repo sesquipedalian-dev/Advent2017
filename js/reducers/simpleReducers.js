@@ -87,3 +87,15 @@ export const day4Output2 = createReducer(undefined, {
         return action.output;
     }
 });
+
+export const day5Input1 = createReducer('', { 
+    [types.DAY5_INPUT1](state, action) { 
+        return action.input;
+    }
+});
+
+export const day5Output1 = createReducer('', { 
+    [types.DAY5_OUTPUT1](state, action) { 
+        return action.output;
+    }
+});
