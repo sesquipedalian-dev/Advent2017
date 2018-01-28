@@ -99,3 +99,9 @@ export const day5Output1 = createReducer('', {
         return action.output;
     }
 });
+
+export const day5Output2 = createReducer('', { 
+    [types.DAY5_OUTPUT2](state, action) { 
+        return action.output;
+    }
+})

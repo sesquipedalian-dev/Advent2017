@@ -17,3 +17,4 @@ export const DAY4_OUTPUT1 = 'day4_output1';
 export const DAY4_OUTPUT2 = 'day4_output2';
 export const DAY5_INPUT1 = 'day5_input1';
 export const DAY5_OUTPUT1 = 'day5_output1';
+export const DAY5_OUTPUT2 = 'day5_output2';

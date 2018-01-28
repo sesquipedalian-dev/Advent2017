@@ -129,3 +129,10 @@ export function setDay5Output1(output) {
         output
     };
 }
+
+export function setDay5Output2(output) { 
+    return { 
+        type: types.DAY5_OUTPUT2, 
+        output
+    };
+}
