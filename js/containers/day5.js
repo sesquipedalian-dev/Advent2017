@@ -10,7 +10,7 @@ class InstructionProg {
         this.program = {};
         this.programCounter = 0; 
         const instructions = progString.split(/[\r\n]/);
-        console.log(instructions, progString);
+        //console.log(instructions, progString);
         instructions.forEach(function(instruction) {
             const instructionVal = parseInt(instruction);
             this.program[this.programCounter++] = instructionVal;
@@ -29,7 +29,7 @@ class InstructionProg {
             (steps < maxSteps)
         ) {
             const instruction = this.program[this.programCounter]; 
-            console.log("Program instruciton step: ", this.programCounter, instruction, this.programSize);
+            //console.log("Program instruciton step: ", this.programCounter, instruction, this.programSize);
             this.incrementInstruction(instruction);
             this.programCounter += instruction;
             steps++;
