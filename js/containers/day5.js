@@ -3,14 +3,11 @@ import { View, Text, Button, TextInput, ScrollView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import defineView from '../lib/defineView';
 
-// TODO - this takes like 10 minutes to run for the second part >_<
-// even the first part is about 1 minute
 class InstructionProg { 
     constructor(progString) { 
         this.program = {};
         this.programCounter = 0; 
         const instructions = progString.split(/[\r\n]/);
-        //console.log(instructions, progString);
         instructions.forEach(function(instruction) {
             const instructionVal = parseInt(instruction);
             this.program[this.programCounter++] = instructionVal;
@@ -29,7 +26,6 @@ class InstructionProg {
             (steps < maxSteps)
         ) {
             const instruction = this.program[this.programCounter]; 
-            //console.log("Program instruciton step: ", this.programCounter, instruction, this.programSize);
             this.incrementInstruction(instruction);
             this.programCounter += instruction;
             steps++;

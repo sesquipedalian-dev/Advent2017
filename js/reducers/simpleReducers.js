@@ -104,4 +104,22 @@ export const day5Output2 = createReducer('', {
     [types.DAY5_OUTPUT2](state, action) { 
         return action.output;
     }
-})
+});
+
+export const day6Input1 = createReducer('', {
+    [types.DAY6_INPUT1](state, action) { 
+        return action.input;
+    }
+});
+
+export const day6Output1 = createReducer(undefined, { 
+    [types.DAY6_OUTPUT1](state, action) { 
+        return action.output;
+    }
+});
+
+export const day6Output2 = createReducer(undefined, {
+    [types.DAY6_OUTPUT2](state, action) { 
+        return action.output;
+    }
+});

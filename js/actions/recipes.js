@@ -136,3 +136,24 @@ export function setDay5Output2(output) {
         output
     };
 }
+
+export function setDay6Input1(input) { 
+    return { 
+        type: types.DAY6_INPUT1,
+        input
+    };
+}
+
+export function setDay6Output1(output) { 
+    return { 
+        type: types.DAY6_OUTPUT1, 
+        output
+    };
+}
+
+export function setDay6Output2(output) { 
+    return { 
+        type: types.DAY6_OUTPUT2, 
+        output
+    };
+}
