@@ -157,3 +157,24 @@ export function setDay6Output2(output) {
         output
     };
 }
+
+export function setDay7Input1(input) { 
+    return { 
+        type: types.DAY7_INPUT1, 
+        input
+    };
+}
+
+export function setDay7Output1(output) { 
+    return { 
+        type: types.DAY7_OUTPUT1,
+        output
+    };
+}
+
+export function setDay7Output2(output) { 
+    return { 
+        type: types.DAY7_OUTPUT2, 
+        output
+    };
+}
