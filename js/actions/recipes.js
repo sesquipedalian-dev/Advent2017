@@ -178,3 +178,24 @@ export function setDay7Output2(output) {
         output
     };
 }
+
+export function setDay8Input1(input) { 
+    return { 
+        type: types.DAY8_INPUT1, 
+        input
+    };
+}
+
+export function setDay8Output1(output) { 
+    return { 
+        type: types.DAY8_OUTPUT1,
+        output
+    };
+}
+
+export function setDay8Output2(output) { 
+    return { 
+        type: types.DAY8_OUTPUT2, 
+        output
+    };
+}
