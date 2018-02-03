@@ -179,3 +179,21 @@ export const day9Output2 = createReducer(undefined, {
         return action.output;
     }
 });
+
+export const day10Input1 = createReducer('', {
+    [types.DAY10_INPUT1](state, action) { 
+        return action.input;
+    }
+});
+
+export const day10Output1 = createReducer(undefined, { 
+    [types.DAY10_OUTPUT1](state, action) { 
+        return action.output;
+    }
+});
+
+export const day10Output2 = createReducer(undefined, {
+    [types.DAY10_OUTPUT2](state, action) { 
+        return action.output;
+    }
+});

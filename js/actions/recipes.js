@@ -220,3 +220,24 @@ export function setDay9Output2(output) {
         output
     };
 }
+
+export function setDay10Input1(input) { 
+    return { 
+        type: types.DAY10_INPUT1, 
+        input
+    };
+}
+
+export function setDay10Output1(output) { 
+    return { 
+        type: types.DAY10_OUTPUT1,
+        output
+    };
+}
+
+export function setDay10Output2(output) { 
+    return { 
+        type: types.DAY10_OUTPUT2, 
+        output
+    };
+}

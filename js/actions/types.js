@@ -30,3 +30,6 @@ export const DAY8_OUTPUT2 = 'day8_output2';
 export const DAY9_INPUT1 = 'day9_input1'; 
 export const DAY9_OUTPUT1 = 'day9_output1'; 
 export const DAY9_OUTPUT2 = 'day9_output2';
+export const DAY10_INPUT1 = 'day10_input1'; 
+export const DAY10_OUTPUT1 = 'day10_output1'; 
+export const DAY10_OUTPUT2 = 'day10_output2';
