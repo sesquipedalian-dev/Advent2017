@@ -197,3 +197,21 @@ export const day10Output2 = createReducer(undefined, {
         return action.output;
     }
 });
+
+export const day11Input1 = createReducer('', {
+    [types.DAY11_INPUT1](state, action) { 
+        return action.input;
+    }
+});
+
+export const day11Output1 = createReducer(undefined, { 
+    [types.DAY11_OUTPUT1](state, action) { 
+        return action.output;
+    }
+});
+
+export const day11Output2 = createReducer(undefined, {
+    [types.DAY11_OUTPUT2](state, action) { 
+        return action.output;
+    }
+});

@@ -14,6 +14,7 @@ class App extends Component {
             <View>
                 <Text>Welcome to the Advent of Code!</Text>
                 <Text>Go to a day!</Text>
+                <Button onPress={Actions.day11} title='Day 11'/>
                 <Button onPress={Actions.day10} title='Day 10'/>
                 <Button onPress={Actions.day9} title='Day 9'/>
                 <Button onPress={Actions.day8} title='Day 8'/>

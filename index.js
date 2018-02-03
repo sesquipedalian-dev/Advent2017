@@ -58,6 +58,7 @@ import Day7 from './js/containers/day7';
 import Day8 from './js/containers/day8';
 import Day9 from './js/containers/day9';
 import Day10 from './js/containers/day10';
+import Day11 from './js/containers/day11';
 
 class App extends Component { 
     render() { 
@@ -78,6 +79,7 @@ class App extends Component {
                         <Scene key='day8' component={Day8} title="Day 8"/>
                         <Scene key='day9' component={Day9} title="Day 9"/>
                         <Scene key='day10' component={Day10} title="Day 10"/>
+                        <Scene key='day11' component={Day11} title="Day 11"/>
                     </Scene>
                 </RouterWithRedux>
             </Provider>
