@@ -43,7 +43,62 @@ class Node {
             }
         })
     }
+
+    getTowerWeightAndBalanced() { 
+        // leaf nodes are always considered 'balanced' and just return their weight
+        if(this.children.length == 0) { 
+            return [this.weight, undefined];
+        } else { 
+            // go through our children and see if any of them report unbalanced. 
+            // if they do, they know the culprit since we're assuming only
+            // 1 node is the problem.
+            var childUnbalanced = undefined;
+            const childrenBalanced = this.children.map(childName => { 
+                const childNode = this.nodeMap.get(childName);
+                const childInfo = childNode.getTowerWeightAndBalanced();
+                if(childInfo[1] !== undefined) { 
+                    childUnbalanced = childInfo[1];
+                }
+                // return child name and weight so we can evaluate if all children weights are the same
+                return [childName, childInfo[0]];
+            });
+
+            // early out if we already have the culprit
+            if(childUnbalanced !== undefined) { 
+                return [0, childUnbalanced];
+            }
+
+            // if we have only one child that is inherently balanced
+            if(childrenBalanced.length == 1) { 
+                return [childrenBalanced[0][1][0] + this.weight, undefined];
+            }
+
+            // k, now we need to find which of our child nodes is unbalanced, if any  
+            const weightMap = new Map();
+            const unbalanced = childrenBalanced.forEach(w => weightMap.set(w[1], (weightMap.get(w[1]) || 0) + 1));
+            const unBalancedChild = childrenBalanced.find(c => { 
+                return weightMap.get(c[1]) == 1;  // TODO one of the children with count 1 needs updated, but the amount may depend on the higher parts of the stack 
+            });
+            if(unBalancedChild !== undefined) { 
+                const targetWeight = childrenBalanced.find(c => c[1] != unBalancedChild[1])[1];
+                const adjust = unBalancedChild[1] - targetWeight;
+                const targetNode = this.nodeMap.get(unBalancedChild[0]);
+                const result = targetNode.weight - adjust;
+                console.log("We might need to try some different results depending here.",
+                  childrenBalanced, this.weight, result
+                );
+                return [0, result];
+            }
+  
+            // if none of our children are throwing it out of whack, then 
+            // return our info to the caller
+            const childrenWeight = childrenBalanced.reduce((soFar, next) => soFar + next[1], 0);
+            return [this.weight + childrenWeight, undefined];
+        }
+    }
 }
+
+// 1086 - 7 = 1079
 
 class Day7 extends Component {
     back() { 
@@ -99,7 +154,9 @@ class Day7 extends Component {
             console.log("using input ", input1);
 
             const rootNode = this.parseTree(input1);
-            this.props.setDay7Output2(rootNode.name);
+            const balanceInfo = rootNode.getTowerWeightAndBalanced();
+            
+            this.props.setDay7Output2(balanceInfo[1]);
         }
     }
 
@@ -132,7 +189,7 @@ class Day7 extends Component {
                 <Text>{output1Value}</Text>
 
                 <Text>
-                    Part 2: ???
+                    Part 2: Find the one node in the tree that has a weight that is unbalancing the tree
                 </Text>
                 <Button 
                     onPress={this.solveInput2.bind(this)}
