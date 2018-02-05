@@ -304,3 +304,25 @@ export function setDay13Output2(output) {
         output
     };
 }
+
+
+export function setDay14Input1(input) { 
+    return { 
+        type: types.DAY14_INPUT1, 
+        input
+    };
+}
+
+export function setDay14Output1(output) { 
+    return { 
+        type: types.DAY14_OUTPUT1,
+        output
+    };
+}
+
+export function setDay14Output2(output) { 
+    return { 
+        type: types.DAY14_OUTPUT2, 
+        output
+    };
+}
