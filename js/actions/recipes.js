@@ -326,3 +326,24 @@ export function setDay14Output2(output) {
         output
     };
 }
+
+export function setDay15Input1(input) { 
+    return { 
+        type: types.DAY15_INPUT1, 
+        input
+    };
+}
+
+export function setDay15Output1(output) { 
+    return { 
+        type: types.DAY15_OUTPUT1,
+        output
+    };
+}
+
+export function setDay15Output2(output) { 
+    return { 
+        type: types.DAY15_OUTPUT2, 
+        output
+    };
+}
