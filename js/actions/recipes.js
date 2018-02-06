@@ -347,3 +347,25 @@ export function setDay15Output2(output) {
         output
     };
 }
+
+
+export function setDay16Input1(input) { 
+    return { 
+        type: types.DAY16_INPUT1, 
+        input
+    };
+}
+
+export function setDay16Output1(output) { 
+    return { 
+        type: types.DAY16_OUTPUT1,
+        output
+    };
+}
+
+export function setDay16Output2(output) { 
+    return { 
+        type: types.DAY16_OUTPUT2, 
+        output
+    };
+}
