@@ -390,3 +390,24 @@ export function setDay17Output2(output) {
         output
     };
 }
+
+export function setDay18Input1(input) { 
+    return { 
+        type: types.DAY18_INPUT1, 
+        input
+    };
+}
+
+export function setDay18Output1(output) { 
+    return { 
+        type: types.DAY18_OUTPUT1, 
+        output
+    };
+}
+
+export function setDay18Output2(output) { 
+    return { 
+        type: types.DAY18_OUTPUT2, 
+        output
+    };
+}
