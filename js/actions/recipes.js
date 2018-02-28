@@ -369,3 +369,24 @@ export function setDay16Output2(output) {
         output
     };
 }
+
+export function setDay17Input1(input) { 
+    return { 
+        type: types.DAY17_INPUT1, 
+        input
+    };
+}
+
+export function setDay17Output1(output) { 
+    return { 
+        type: types.DAY17_OUTPUT1, 
+        output
+    };
+}
+
+export function setDay17Output2(output) { 
+    return { 
+        type: types.DAY17_OUTPUT2, 
+        output
+    };
+}
