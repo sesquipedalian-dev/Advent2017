@@ -4,6 +4,7 @@ import { Actions } from 'react-native-router-flux';
 import defineView from '../lib/defineView';
 
 const LAST_VALUE = 2017;
+const LAST_VALUE_2 = 50000000;
 class Day17 extends Component {
     back() { 
         Actions.pop();
@@ -25,11 +26,14 @@ class Day17 extends Component {
 
                 // move position
                 currentPosition = (currentPosition + skipNum) % elements.length;
+                if(currentPosition == 0) { 
+                    console.log("found a 0 step ", currentInput);
+                }
 
                 // insert current input after that position
                 elements.splice(currentPosition + 1, 0, currentInput); 
 
-                console.log("step ", currentInput, currentPosition, elements);
+                //console.log("step ", currentInput, currentPosition, elements);
             }
 
             const nextElem = elements[(currentPosition + 2) % elements.length];
@@ -43,8 +47,25 @@ class Day17 extends Component {
         if(typeof input1 === 'string') {
             console.log("using input ", input1);
  
-                        
-            this.props.setDay17Output2('');
+            const elements = [0];
+            var currentPosition = -1;
+            const skipNum = parseInt(input1);
+            var currentInput = 0;
+            var mostRecent0;
+
+            while(currentInput < LAST_VALUE_2) { 
+                currentPosition++;
+                currentInput++;
+
+                // move position
+                currentPosition = (currentPosition + skipNum) % currentInput;
+                if(currentPosition == 0) { 
+                    console.log("found a 0 step ", currentInput);
+                    mostRecent0 = currentInput;
+                }
+            }
+
+            this.props.setDay17Output2(mostRecent0);
         }
     }
 
@@ -77,7 +98,7 @@ class Day17 extends Component {
                 <Text>{output1Value}</Text>
 
                 <Text>
-                    YYY
+                    Brute force running spin lock 
                 </Text>
                 <Button 
                     onPress={this.solveInput2.bind(this)}
