@@ -411,3 +411,24 @@ export function setDay18Output2(output) {
         output
     };
 }
+
+export function setDay19Input1(input) { 
+    return { 
+        type: types.DAY19_INPUT1, 
+        input
+    };
+}
+
+export function setDay19Output1(output) { 
+    return { 
+        type: types.DAY19_OUTPUT1,
+        output
+    };
+}
+
+export function setDay19Output2(output) { 
+    return { 
+        type: types.DAY19_OUTPUT2, 
+        output
+    };
+}

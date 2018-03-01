@@ -57,3 +57,6 @@ export const DAY17_OUTPUT2 = 'day17_output2';
 export const DAY18_INPUT1 = 'day18_input1';
 export const DAY18_OUTPUT1 = 'day18_output1'; 
 export const DAY18_OUTPUT2 = 'day18_output2';
+export const DAY19_INPUT1 = 'day19_input1';
+export const DAY19_OUTPUT1 = 'day19_output1';
+export const DAY19_OUTPUT2 = 'day19_output2';
