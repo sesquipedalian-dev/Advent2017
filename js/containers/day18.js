@@ -9,7 +9,7 @@ class Instruction {
     }
 
     process(assembly, firstArg, secondArg) { 
-
+        return cont;
     }
 }
 
@@ -20,6 +20,7 @@ class SetInstruction extends Instruction {
 
     process(assembly, firstArg, secondArg) { 
         assembly.setRegister(firstArg, assembly.getRegisterOrLiteral(secondArg));
+        return cont;
     }
 }
 
@@ -31,6 +32,7 @@ class AddInstruction extends Instruction {
     process(assembly, firstArg, secondArg) { 
         const currentRegister = assembly.getRegister(firstArg);
         assembly.setRegister(firstArg, currentRegister + assembly.getRegisterOrLiteral(secondArg));
+        return cont;
     }
 }
 
@@ -40,7 +42,14 @@ class SendInstruction extends Instruction {
     }
 
     process(assembly, firstArg, secondArg) { 
-        assembly.setLastSound(assembly.getRegisterOrLiteral(firstArg));
+        const valueToPush = assembly.getRegisterOrLiteral(firstArg);
+        assembly.setLastSound(valueToPush);
+        assembly.incrementSendCount();
+        const other = assembly.getOtherAssembly()
+        if(other) { 
+            other.queue.push(valueToPush);
+        }
+        return cont;
     }
 }
 
@@ -54,6 +63,7 @@ class MultiplyInstruction extends Instruction {
         assembly.setRegister(firstArg, 
             currentRegister * assembly.getRegisterOrLiteral(secondArg)
         )
+        return cont;
     }
 }
 
@@ -67,6 +77,7 @@ class ModInstruction extends Instruction {
         assembly.setRegister(firstArg, 
             currentRegister % assembly.getRegisterOrLiteral(secondArg)
         )
+        return cont;
     }
 }
 
@@ -76,9 +87,21 @@ class RecoverInstruction extends Instruction {
     }
 
     process(assembly, firstArg, secondArg) { 
-        const currentRegister = assembly.getRegisterOrLiteral(firstArg); 
-        if(currentRegister != 0) { 
-            assembly.setLastSoundRecovered();
+        const other = assembly.getOtherAssembly()
+        if(other) { 
+            const nextValue = assembly.queue.shift();
+            if(!nextValue) { 
+                return pause;
+            } else { 
+                assembly.setRegister(firstArg, nextValue);
+                return cont;
+            }
+        } else { 
+            const currentRegister = assembly.getRegisterOrLiteral(firstArg); 
+            if(currentRegister != 0) { 
+                assembly.setLastSoundRecovered();
+            }
+            return cont;
         }
     }
 }
@@ -93,6 +116,7 @@ class JumpInstruction extends Instruction {
         if(currentRegister > 0) { 
             assembly.jump(assembly.getRegisterOrLiteral(secondArg) - 1);
         }
+        return cont;
     }
 }
 
@@ -106,26 +130,58 @@ const allInstructions = [
     new JumpInstruction()
 ];
 
+const cont = "continue"; 
+const pause = "pause";
+const halted = "halted";
+
+
 class Assembly { 
-    constructor(instructions) { 
-        this.registers = {};
+    constructor(instructions, programID) { 
+        this.registers = {p: programID};
         this.lastSound = undefined;
         this.lastSoundRecovered = undefined;
         this.instructionPointer = 0;
         this.instructions = instructions;
+        this.queue = [];
+        this.sendCount = 0;
+    }
+
+    incrementSendCount() { 
+        this.sendCount++;
+    }
+
+    getSendCount() { 
+        return this.sendCount;
+    }
+
+    setOtherAssembly(assembly) { 
+        this.otherAssembly = assembly;
+    }
+
+    getOtherAssembly() { 
+        return this.otherAssembly;
     }
 
     run() { 
-        while(
+        while(this.processNextInstruction() != halted);
+    }
+
+    processNextInstruction() { 
+        var retVal; 
+        const canRun =
             (0 <= this.instructionPointer) &&
             (this.instructionPointer < this.instructions.length) && 
             (!this.lastSoundRecovered)
-        ) { 
+        
+        if(canRun) { 
             const currentInstruction = this.instructions[this.instructionPointer];
-            console.log("iterate ", currentInstruction, this, this.instructionPointer, this.getRegister("a"));
-            this.processInstruction(currentInstruction);
-            this.instructionPointer++;
+            //console.log("iterate ", currentInstruction, this, this.instructionPointer, this.getRegister("a"));
+            retVal = this.processInstruction(currentInstruction);
+            this.instructionPointer++;   
+        } else { 
+            retVal = halted;
         }
+        return retVal;
     }
 
     jump(n) { 
@@ -145,6 +201,7 @@ class Assembly {
     }
 
     processInstruction(instruction) {
+        var retVal = cont;
         const instructionRegex = /^(\w+) (\w+)( ([-\w]+))?/;
         const match = instructionRegex.exec(instruction); 
 
@@ -155,9 +212,11 @@ class Assembly {
 
             const selectedInstruction = allInstructions.find(i => i.name == instructionName);
             if(selectedInstruction) { 
-                selectedInstruction.process(this, firstArg, secondArg);
+                retVal = selectedInstruction.process(this, firstArg, secondArg);
             }
         }
+
+        return retVal;
     }
 
     setRegister(registerName, value) { 
@@ -206,8 +265,50 @@ class Day18 extends Component {
         if(typeof input1 === 'string') {
             console.log("using input ", input1);
  
-                        
-            this.props.setDay18Output2('');
+            const lines = input1.split(/[\r\n]/);
+            const assembly1 = new Assembly(lines, 0);
+            const assembly2 = new Assembly(lines, 1);
+            assembly1.setOtherAssembly(assembly2);
+            assembly2.setOtherAssembly(assembly1);
+
+            var currentAssembly = assembly1;
+            const switcharoo = function() { 
+                if(currentAssembly == assembly1) { 
+                    currentAssembly = assembly2;
+                } else { 
+                    currentAssembly = assembly1;
+                }
+            }
+
+            var currentStatus = cont;
+            var foundAPause = false;
+            var foundHalted = false;
+            while(currentStatus != halted) { 
+                currentStatus = currentAssembly.processNextInstruction();
+                if(currentStatus == halted) { 
+                    if(foundHalted) { 
+                        // both halted, terminate
+                    } else { 
+                        foundHalted = true;
+                        currentStatus = cont;
+                        switcharoo();
+                    }
+                } else if(currentStatus == pause) { 
+                    if(foundAPause) { 
+                        // both threads have halted, terminate
+                        currentStatus = halted
+                    } else { 
+                        // if one of the threads paused, switch to the other one
+                        currentAssembly.instructionPointer--;
+                        switcharoo();
+                        foundAPause = true;
+                    }
+                } else { 
+                    foundAPause = false;
+                }
+            }
+
+            this.props.setDay18Output2(assembly2.getSendCount());
         }
     }
 
