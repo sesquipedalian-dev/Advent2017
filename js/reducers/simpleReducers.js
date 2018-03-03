@@ -360,3 +360,21 @@ export const day19Output2 = createReducer(undefined, {
         return action.output;
     }
 });
+
+export const day20Input1 = createReducer('', { 
+    [types.DAY20_INPUT1](state, action) { 
+        return action.input;
+    }
+});
+
+export const day20Output1 = createReducer(undefined, { 
+    [types.DAY20_OUTPUT1](state, action) { 
+        return action.output;
+    }
+});
+
+export const day20Output2 = createReducer(undefined, { 
+    [types.DAY20_OUTPUT2](state, action) { 
+        return action.output;
+    }
+});

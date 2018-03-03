@@ -432,3 +432,24 @@ export function setDay19Output2(output) {
         output
     };
 }
+
+export function setDay20Input1(input) { 
+    return { 
+        type: types.DAY20_INPUT1, 
+        input
+    };
+}
+
+export function setDay20Output1(output) { 
+    return { 
+        type: types.DAY20_OUTPUT1, 
+        output
+    };
+}
+
+export function setDay20Output2(output) { 
+    return { 
+        type: types.DAY20_OUTPUT2, 
+        output
+    };
+}
