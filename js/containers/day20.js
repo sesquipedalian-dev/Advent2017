@@ -3,6 +3,8 @@ import { View, Text, Button, TextInput, ScrollView } from 'react-native';
 import { Actions } from 'react-native-router-flux';
 import defineView from '../lib/defineView';
 
+const ALWAYS = 'always';
+
 class Vector3 { 
     constructor(x, y, z){ 
         this.x = x || 0;
@@ -30,6 +32,15 @@ class Particle {
         }
     }
 
+    step() { 
+        this.velocity.x += this.acceleration.x;
+        this.velocity.y += this.acceleration.y;
+        this.velocity.z += this.acceleration.z;
+        this.position.x += this.velocity.x;
+        this.position.y += this.velocity.y;
+        this.position.z += this.velocity.z;
+    }
+
     getManhattanDistance() { 
         return Math.abs(this.position.x) + 
             Math.abs(this.position.y) + 
@@ -49,6 +60,137 @@ class Particle {
             Math.abs(this.acceleration.y) + 
             Math.abs(this.acceleration.z)
         ;
+    }
+
+    // returns the time t that the particles collide at, or null if they don't
+    getCollisionWith(other) { 
+        // find when each of the components of the position intersect
+        const collisionTimesX = this.getCollision(other, (p) => {
+            return {p: p.position.x, v: p.velocity.x, a: p.acceleration.x}
+        });
+
+        const collisionTimesY = this.getCollision(other, (p) => {
+            return {p: p.position.y, v: p.velocity.y, a: p.acceleration.y}
+        });
+
+        const collisionTimesZ = this.getCollision(other, (p) => {
+            return {p: p.position.z, v: p.velocity.z, a: p.acceleration.z}
+        });
+
+        const potentialCollisionTimes = collisionTimesX.concat(collisionTimesY).concat(collisionTimesZ);
+
+        const contains = function(array, item) { 
+            return (array.indexOf(ALWAYS) != -1) || 
+                (array.indexOf(item) != -1)
+            ; 
+        };
+
+        var minTimeFound;
+        potentialCollisionTimes.forEach(t => {
+            if(t == ALWAYS) {
+                // ALWAYS matches with any concrete times in the other ones, 
+                // or returns ALWAYS if all 3 are always
+                if(
+                    contains(collisionTimesX, ALWAYS) && 
+                    contains(collisionTimesY, ALWAYS) && 
+                    contains(collisionTimesZ, ALWAYS) 
+                ) {
+                    minTimeFound = 0; // ALWAYS collisions can be deleted right off
+                }
+            } else { 
+                const isInt = (t - Math.floor(t)) < .00001;
+                if(
+                    (minTimeFound != ALWAYS) && 
+                    (t >= 0) && 
+                    isInt && 
+                    (!minTimeFound || t < minTimeFound) && 
+                    contains(collisionTimesX, t) && 
+                    contains(collisionTimesY, t) &&
+                    contains(collisionTimesZ, t)
+                ) {
+                    minTimeFound = t;
+                }
+            }
+        });
+
+        // const allCollisionTimes = collisionTimesX.concat(collisionTimesY).concat(collisionTimesZ);
+
+        // // find the smallest time when the times all line up
+        // var minTimeFound = undefined;
+        // allCollisionTimes.sort();
+        // for(var tI in allCollisionTimes) { 
+        //     const tX = allCollisionTimes[tI];
+        //     const isInt = (tX - Math.floor(tX)) < .00001;
+        //     if(isInt && (!minTimeFound || (tX < minTimeFound))) { 
+        //         const tSquared = Math.pow(tX, 2)
+        //         const yAtT1 = (tSquared * this.acceleration.y) + (this.velocity.y * tX) + this.position.y;
+        //         const yAtT2 = (tSquared * other.acceleration.y) + (other.velocity.y * tX) + other.position.y;
+                
+        //         if(yAtT1 == yAtT2) { 
+        //             const zAtT1 = (tSquared * this.acceleration.z) + (this.velocity.z * tX) + this.position.z;
+        //             const zAtT2 = (tSquared * other.acceleration.z) + (other.velocity.z * tX) + other.position.z;
+
+        //             if(zAtT1 == zAtT2) { 
+        //                 const xAtT1 = (tSquared * this.acceleration.x) + (this.velocity.x * tX) + this.position.x;
+        //                 const xAtT2 = (tSquared * other.acceleration.x) + (other.velocity.x * tX) + other.position.x;
+
+        //                 if(xAtT1 == xAtT2) { 
+        //                     minTimeFound = tX;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        return minTimeFound;
+    }
+
+    getCollision(other, f) {
+        // pull out all the position, velocity, acceleration components
+        const myComponents = f(this);
+        const p1 = myComponents.p;
+        const v1 = myComponents.v;
+        const a1 = myComponents.a;
+
+        const otherComponents = f(other);
+        const p2 = otherComponents.p;
+        const v2 = otherComponents.v;
+        const a2 = otherComponents.a;
+
+        // this guy on the reddit says that this is the equation to solve?
+        // ((a.x - that.a.x) / 2.0, (v.x + a.x / 2.0) - (that.v.x + that.a.x / 2.0), p.x - that.p.x)
+        // NOT p = vt + a(t^2)/2 + p_initial
+
+        // quadratic equation for position over time is 
+        // p = vt + a(t^2)/2 + p_initial
+        // so find the quadratic equation of the intersection of both 
+        // particles' positions
+        const a = a1 - a2;
+        const b = (v1 + (a1 / 2)) - (v2 + (a2 / 2));
+        const c = p1 - p2;
+
+        // if combined equation's a is 0, then we're not quadratic, just linear
+        if(a == 0) { 
+            if(b != 0) { 
+                return [-c / b];
+            } else if (c != 0){
+                return [];
+            } else { 
+                return ALWAYS; // TODO in this case, they are colliding at EVERY time
+            }
+        } else { 
+            // find discriminant of the equation - will tell us how many intersections there are
+            const d = Math.pow(b, 2) - (4 * a * c);
+            if (d >= 0) { 
+                // 2 intersection
+                const diffPart = Math.sqrt(d);
+                const i1 = (-b + diffPart) / (2 * a);
+                const i2 = (-b - diffPart) / (2 * a);
+                return [i1, i2];
+            } else { 
+                return [];
+            }
+        }
     }
 }
 class Day20 extends Component {
@@ -87,10 +229,149 @@ class Day20 extends Component {
         const input1 = this.props.input1;
         if(typeof input1 === 'string') {
             console.log("using input ", input1);
- 
-                        
-            this.props.setDay20Output2('');
+
+            const lines = input1.split(/[\r\n]/);
+            const particles = {};
+            const particleCount = 0;
+            lines.forEach((l, i) => {
+                const newP = new Particle(i, l);
+                particles[i] = newP;
+                particleCount++;
+            })
+            const collisions = new Map(); // map from time to array of collisions at that time
+
+            // compare each particle with every other remaining particle to see 
+            // if they ever collide
+            for(var i = 0; i < particleCount; i++) { 
+                for(var j = i + 1; j < particleCount; j++) { 
+                    const collideAt = particles[i].getCollisionWith(particles[j]);
+                    if(collideAt) { 
+                        const arr = collisions.get(collideAt) || [];
+                        arr.push({first: i, second: j});
+                        collisions.set(collideAt, arr);
+                    }
+                }
+            }
+
+            console.log("found all collisions ", collisions);
+
+            // next, filter out collisions that happened after one of the particles
+            // was already collided earlier
+            const collisionTimes = Array.from(collisions.keys());
+            collisionTimes.sort();
+            for(var timeI in collisionTimes) { 
+                const time = collisionTimes[timeI];
+                const collisionsThisTime = collisions.get(time) || [];
+                var deleteMe = [];
+                collisionsThisTime.forEach(obj => { 
+                    const first = obj.first;
+                    const second = obj.second;
+                    if(particles[first] && particles[second]) { 
+                        deleteMe.push(first);
+                        deleteMe.push(second);
+                    }
+                });
+
+                deleteMe.forEach(k => particles[k] = undefined);
+            }
+
+            // result is how many particles are left after all collisions resolved  
+            var count = 0;
+            for(var id in particles) { 
+                if(particles[id]) { 
+                    count++;
+                }
+            }                      
+            this.props.setDay20Output2(count);
         }
+    }
+
+    solveInput2Take2(input) { 
+        const input1 = this.props.input1;
+        if(typeof input1 === 'string') {
+            console.log("using input ", input1);
+
+            const lines = input1.split(/[\r\n]/);
+            const particles = [];
+            const particleCount = 0;
+            lines.forEach((l, i) => {
+                particles.push(new Particle(i, l));
+                // const newP = new Particle(i, l);
+                // particles[i] = newP;
+                // particleCount++;
+            })
+
+            for(var i = 0; i < 1000; i++){
+                var seen = [];
+
+                particles.forEach((particle, index) => {
+                    var pos = particle.position;
+                    var vel = particle.velocity;
+                    var acc = particle.acceleration;
+                
+                    particle.velocity = {
+                        x: particle.velocity.x + particle.acceleration.x,
+                        y: particle.velocity.y + particle.acceleration.y,
+                        z: particle.velocity.z + particle.acceleration.z
+                    };
+                    particle.position = { 
+                        x: particle.velocity.x + particle.position.x, 
+                        y: particle.velocity.y + particle.position.y,
+                        z: particle.velocity.z + particle.position.z,
+                    };                    
+                    seen.push(particle.position.x+'/'+particle.position.y+'/'+particle.position.z);
+                }); 
+                
+                seen.forEach((val, index) => {
+                    var a = seen.indexOf(val);
+                    if(a != index){
+                        particles[a] = null;
+                        particles[index] = null;
+                    }
+                });
+                particles = particles.filter(c => c != null);
+                seen = [];
+            }
+
+            // for(var t = 1; t < 1000; t++) { 
+            //     var deleteMe = [];
+            //     for(var partId in particles) { 
+            //         if(particles[partId]) { 
+            //             particles[partId].step();
+            //         }
+            //     }
+                
+            //     for(var i = 0; i < particleCount; i++) { 
+            //         if(particles[i]) { 
+            //             for(var j = i + 1; j < particleCount; j++) { 
+            //                 if(particles[j]) { 
+            //                     if(
+            //                         (particles[i].position.x == particles[j].position.x) && 
+            //                         (particles[i].position.y == particles[j].position.y) && 
+            //                         (particles[i].position.z == particles[j].position.z) 
+            //                     ) {
+            //                         deleteMe.push(i);
+            //                         deleteMe.push(j);
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     }
+
+            //     deleteMe.forEach(deleteKey => { 
+            //         particles[deleteKey] = undefined;
+            //         particleCount--;
+            //     });
+            // }
+
+            // var count = 0;
+            // for(var id in particles) { 
+            //     if(particles[id]) { 
+            //         count++;
+            //     }
+            // }    
+            this.props.setDay20Output2(particles.length);
+        }   
     }
 
     render() {
@@ -122,10 +403,10 @@ class Day20 extends Component {
                 <Text>{output1Value}</Text>
 
                 <Text>
-                    YYY
+                    Detect particle collisions
                 </Text>
                 <Button 
-                    onPress={this.solveInput2.bind(this)}
+                    onPress={this.solveInput2Take2.bind(this)}
                     title='Solve!'
                 />
                 <Text>{output2Value}</Text>
