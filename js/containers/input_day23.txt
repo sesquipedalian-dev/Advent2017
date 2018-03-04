@@ -1,0 +1,51 @@
+// val (b, c) = if(debug) { 
+//   (-90700, -107000)
+// } else { 
+//   (93, 93)
+// }
+
+// come from A, END
+// f = 1 // not done flag?
+// d = 2
+set f 1  
+set d 2
+
+// for e = 2; e >0; e--;
+set e 2 // come from B
+
+// come from c
+// while(g != 0) { 
+//    g = d * e - b;
+//    if(g == 0) { 
+//      f = 0
+//    }
+//    e -=1
+//    g = e - b
+// }
+set g d 
+mul g e
+sub g b
+// if(g == 0) { 
+//    f = 0
+// }
+jnz g 2
+set f 0
+sub e -1
+set g e
+sub g b
+C: jnz g -8
+
+sub d -1
+set g d
+sub g b
+B: jnz g -13
+jnz f 2
+sub h -1
+set g b
+sub g c
+// break if g == 0
+// else b -= 17 and loop
+jnz g 2
+jnz 1 3
+sub b -17
+END: jnz 1 -23
