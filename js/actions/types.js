@@ -63,3 +63,6 @@ export const DAY19_OUTPUT2 = 'day19_output2';
 export const DAY20_INPUT1 = 'day20_input1'; 
 export const DAY20_OUTPUT1 = 'day20_output1'; 
 export const DAY20_OUTPUT2 = 'day20_output2';
+export const DAY21_INPUT1 = 'day21_input1';
+export const DAY21_OUTPUT1 = 'day21_output1';
+export const DAY21_OUTPUT2 = 'day21_output2';
