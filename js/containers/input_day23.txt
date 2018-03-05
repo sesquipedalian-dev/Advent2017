@@ -11,9 +11,18 @@ set f 1
 set d 2
 
 // for e = 2; e >0; e--;
-set e 2 // come from B
+// come from B
+set e 2
 
 // come from c
+// find an e that cancels out b
+// and set f == 0 once we find that value
+// while(e != b) { 
+//    if(d * e - b == 0) { 
+//       f = 0;
+//    }    
+//    e -= 1;   
+// }
 // while(g != 0) { 
 //    g = d * e - b;
 //    if(g == 0) { 
@@ -35,15 +44,19 @@ set g e
 sub g b
 C: jnz g -8
 
+
 sub d -1
 set g d
 sub g b
 B: jnz g -13
+// if we found a 0 value earlier then increment h
 jnz f 2
 sub h -1
+
+
 set g b
 sub g c
-// break if g == 0
+// break if b == c
 // else b -= 17 and loop
 jnz g 2
 jnz 1 3
