@@ -537,3 +537,24 @@ export function setDay24Output2(output) {
         output
     };
 }
+
+export function setDay25Input1(input) { 
+    return { 
+        type: types.DAY25_INPUT1, 
+        input
+    };
+}
+
+export function setDay25Output1(output) { 
+    return { 
+        type: types.DAY25_OUTPUT1, 
+        output
+    };
+}
+
+export function setDay25Output2(output) { 
+    return { 
+        type: types.DAY25_OUTPUT2, 
+        output
+    };
+}

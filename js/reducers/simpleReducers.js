@@ -450,3 +450,21 @@ export const day24Output2 = createReducer(undefined, {
         return action.output;
     }
 });
+
+export const day25Input1 = createReducer('', { 
+    [types.DAY25_INPUT1](state, action) { 
+        return action.input;
+    }
+});
+
+export const day25Output1 = createReducer(undefined, { 
+    [types.DAY25_OUTPUT1](state, action) { 
+        return action.output;
+    }
+});
+
+export const day25Output2 = createReducer(undefined, { 
+    [types.DAY25_OUTPUT2](state, action) { 
+        return action.output;
+    }
+});

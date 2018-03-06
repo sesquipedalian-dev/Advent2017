@@ -75,3 +75,6 @@ export const DAY23_OUTPUT2 = 'day23_output2';
 export const DAY24_INPUT1 = 'day24_input1'; 
 export const DAY24_OUTPUT1 = 'day24_output1'; 
 export const DAY24_OUTPUT2 = 'day24_output2';
+export const DAY25_INPUT1 = 'day25_input1';
+export const DAY25_OUTPUT1 = 'day25_output1';
+export const DAY25_OUTPUT2 = 'day25_output2';
